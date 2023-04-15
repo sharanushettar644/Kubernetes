@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: replica
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: replica
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavilable: 1
+  template:
+    metadata:
+      labels:
+        app: replica
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.0
+        ports:
+        - containerPort: 80

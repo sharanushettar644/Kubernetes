@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hpa
+  namespace: default
+  labels:
+    app: hpa
+spec:
+ replicas: 3
+ selector:
+   matchLabels:
+     app: hpa
+ template:
+   metadata:
+     labels:
+       app: hpa
+   spec:
+     containers:
+     - name: hpa
+       image: nginx
+       ports:
+       - containerPort: 80
+       resources:
+         limits:
+           memory: "128Mi"
+           cpu: "800m"
+         requests:
+           memory: "64Mi"
+           cpu: "500m"
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hpa-svc
+spec:
+  type: NodePort
+  selector:
+    app: hpa
+  ports:
+  - port: 80
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+ name: hpa-demo-deployment
+spec:
+ scaleTargetRef:
+   apiVersion: apps/v1
+   kind: Deployment
+   name: hpa
+ minReplicas: 1
+ maxReplicas: 10
+ targetCPUUtilizationPercentage: 50

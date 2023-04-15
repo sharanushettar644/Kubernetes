@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: static-web
+  labels:
+    app: static
+spec:
+  containers:
+    - command:
+        - sleep
+        - "3600"
+      image: nginx
+      name: nginx

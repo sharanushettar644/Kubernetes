@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: debug-network-pod
+spec:
+  containers:
+    - command:
+        - sleep
+        - "3600"
+      image: nginx
+      name: nginx-123
